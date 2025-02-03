@@ -24,6 +24,28 @@ The blog uses Connect Four as an example to follow. There is some code that I wi
 
 A strategy to keep the game logic sparate from the UI is to build the game so that it can be played, in full, in the console. By not needing to rely on the UI, we can be sure the code has integrity and is not concerning itself with what the browser is showing. The author's Connect Four console version is found [here](https://replit.com/@40percentzinc/ConnectFourConsole#script.js). I am thinking for now I will try to at least reproduce this with an understanding on how things are working. Then before moving on to the UI I will utilize this strategy to build a console-version of Tic Tac Toe. I will take notes as I go and update the next section with them along with how I plan to apply them to the Tic Tac Toe game.
 
+#### Console-Version Core Review
+
+- First the author creates a `GameBoard` module that exposes three methods, `getBoard`, `dropToken` and `printMethod`.
+
+```js
+function GameBoard() {
+  // ...
+
+  const getBoard = () => board;
+
+  const dropToken = (column, player) => {
+    //...
+  };
+
+  const printBoard = () => {
+    // ...
+  };
+
+  return { getBoard, dropToken, printBoard };
+}
+```
+
 ### Putting the walls on
 
 After getting the console version of the game working, the next step is to add the `view` aspect of the game. Get an understanding that the only way the UI should need to interact with the core game code in order to play a round is through the `GameController.playRound()` method. The game should be constructed to have a very limited interface, and in doing so, make it easy to interact with from the "outside".
