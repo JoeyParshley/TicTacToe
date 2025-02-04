@@ -141,9 +141,9 @@ return { getBoard, dropToken, printBoard };
 
 A Cell represents one "square" on the board and can have one of:
 
-- 0: no token is in the square,
-- 1: Player One's token
-- 2: Player Two's token
+- 0: no token is in the square, ( - for Tic Tac Toe)
+- 1: Player One's token, ( X for Tic Tac Toe)
+- 2: Player Two's token, ( O for Tic Tac Toe)
 
 It exposes two methods:
 
@@ -188,6 +188,13 @@ It:
 - creates a method that prints the new round
 - creates a mehtod that plays the round
 - exposes the `playRound` and `getActivePlayer` methods.
+
+```js
+function GameController(
+  playerOneName: "PlayerOne",
+  playerTwoName: "PlayerTwo"
+) {}
+```
 
 ###### board
 

@@ -102,3 +102,95 @@ function Cell() {
     getCellValue,
   };
 }
+
+/**
+ * GameController module    -   accepts two player names.
+ * @param {*} playerOneName
+ * @param {*} playerTwoName
+ *
+ *  -   This module is responsible for controling the flow and the state of the game's turns as well if anyone won
+ *  -   it:
+ *      -   instantiate a new Gameboard instance            -   board
+ *      -   instantiates and array of player objects        -   players
+ *      -   instantiates the active player                  -   activePlayer
+ *      -   creates a method to swith player turns          -   switchPlayerTurn
+ *      -   creates a getter for the active player          -   getActivePlayer
+ *      -   creates a method to print the state of the game -   printNewRound
+ *      -   creates a method to play a round                -   playRound
+ *      -   set the intial state with printNewRound()
+ *      -   exposes the public methods
+ */
+function GameController(
+  playerOneName = "PlayerOne",
+  playerTwoName = "PlayerTwo"
+) {
+  // instantiate the GameBoard
+  const board = Gameboard();
+
+  // initialize the players
+  players = [
+    {
+      name: playerOneName,
+      token: "X",
+    },
+    {
+      name: playerTwoName,
+      token: "O",
+    },
+  ];
+
+  // initialize the active player to the first one in the players array
+  let activePlayer = players[0];
+
+  /**
+   * Toggle the active player
+   */
+  const switchPlayerTurn = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  /**
+   * active player getter
+   * @returns actvePlayer
+   */
+  const getActivePlayer = () => activePlayer;
+
+  /**
+   * starts a new round by displaying the current state of the board and stating
+   * that it is the next players turn.
+   */
+  const printNewRound = () => {
+    board.printBoard();
+    console.log(`${getActivePlayer().name}'s turn.`);
+  };
+
+  const playRound = (row, column) => {
+    // console current players choice
+    console.log(
+      `Dropping ${
+        getActivePlayer().name
+      }'s token into row: ${row}, column: ${column}...`
+    );
+
+    // drop current players token into the selcted spot
+    board.dropToken(row, column, getActivePlayer().token);
+
+    /**
+     * test if the player is a winner
+     */
+
+    // switch the player turn and display the new state
+    switchPlayerTurn();
+    printNewRound();
+  };
+
+  // display the initial state
+  printNewRound();
+
+  // expose the public methods
+  return {
+    playRound,
+    getActivePlayer,
+    getBoard: board.getBoard,
+  };
+}
