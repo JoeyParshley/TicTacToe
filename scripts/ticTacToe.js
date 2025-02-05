@@ -126,8 +126,8 @@ function GameController(
 ) {
   // instantiate the GameBoard
   const board = Gameboard();
-  let roundsPlayed = 0;
   let hasWinner = false;
+  let hasTie = false;
 
   // initialize the players
   players = [
@@ -167,6 +167,12 @@ function GameController(
   };
 
   const playRound = (row, column) => {
+    if (row < 0 || row > 2 || column < 0 || column > 2) {
+      console.error(
+        "Row and column must be betwwen 0 adn 2. Try again please."
+      );
+      return;
+    }
     // console current players choice
     console.log(
       `Dropping ${
@@ -176,7 +182,6 @@ function GameController(
 
     // drop current players token into the selcted spot
     board.dropToken(row, column, getActivePlayer().token);
-    ++roundsPlayed;
 
     /**
      * test if the player is a winner
@@ -215,11 +220,8 @@ function GameController(
               currentCellValue === lowerRightAdjacentCell &&
               currentCellValue === lowerNextRightAdjacentCell
             ) {
-              console.log(`Winner in diagonal row`);
               hasWinner = true;
               break;
-            } else {
-              console.log(`No diagonal winner`);
             }
           } else if (column === 2) {
             // last column need to test lowerLeft and lowerNextLeft
@@ -235,10 +237,8 @@ function GameController(
               currentCellValue === lowerLeftAdjacentCell &&
               currentCellValue === lowerNextLeftAdjacentCell
             ) {
-              console.log(`Winner in diagonal row`);
+              hasWinner = true;
               break;
-            } else {
-              console.log(`No diagonal winner`);
             }
           }
 
@@ -269,11 +269,8 @@ function GameController(
               (currentCellValue === upperRightAdjacentCell &&
                 currentCellValue === lowerLeftAdjacentCell)
             ) {
-              console.log(`Winner in diagonal row`);
               hasWinner = true;
               break;
-            } else {
-              console.log(`No diagonal winner`);
             }
           }
 
@@ -294,7 +291,7 @@ function GameController(
               currentCellValue === upperRightAdjacentCell &&
               currentCellValue === upperNextRightAdjacentCell
             ) {
-              console.log(`Winner in diagonal row`);
+              hasWinner = true;
               break;
             }
           } else if (column === 2) {
@@ -311,9 +308,7 @@ function GameController(
               currentCellValue === upperLeftAdjacentCell &&
               currentCellValue === upperNextLeftAdjacentCell
             ) {
-              console.log(`Winner in diagonal row`);
               hasWinner = true;
-              break;
             }
           }
           break;
@@ -349,15 +344,11 @@ function GameController(
             .getBoard()
             [row][column + 2].getCellValue()
             .toUpperCase();
-          if (
+          return (
             currentCellValue === nextColumnValue &&
             currentCellValue === nextNextColumnValue
-          ) {
-            console.log(`winner in row: ${row}.`);
-            break;
-          } else {
-            console.log(`No winner in row ${row}.`);
-          }
+          );
+
           break;
 
         case 1: // middle column test previous and next columns
@@ -369,15 +360,11 @@ function GameController(
             .getBoard()
             [row][column - 1].getCellValue()
             .toUpperCase();
-          if (
+          return (
             currentCellValue === nextColumnValue &&
             currentCellValue === previousColumnValue
-          ) {
-            console.log(`winner in row: ${row}.`);
-            hasWinner = true;
-          } else {
-            console.log(`No winner in row ${row}.`);
-          }
+          );
+
           break;
 
         case 2: // last column test previous two columns
@@ -389,15 +376,11 @@ function GameController(
             .getBoard()
             [row][column - 2].getCellValue()
             .toUpperCase();
-          if (
+          return (
             currentCellValue === previousColumnValue &&
             currentCellValue === previousPreviousColumnValue
-          ) {
-            console.log(`winner in row: ${row}.`);
-            hasWinner = true;
-          } else {
-            console.log(`No winner in row ${row}.`);
-          }
+          );
+
           break;
 
         default:
@@ -431,16 +414,11 @@ function GameController(
             .getBoard()
             [row + 2][column].getCellValue()
             .toUpperCase();
-          if (
+          return (
             currentCellValue === nextRowValue &&
             currentCellValue === nextNextRowValue
-          ) {
-            console.log(`winner in column: ${column}.`);
-            hasWinner = true;
-            break;
-          } else {
-            console.log(`No winner in column ${column}.`);
-          }
+          );
+
           break;
 
         case 1: // middle row test previous and next row
@@ -452,16 +430,11 @@ function GameController(
             .getBoard()
             [row - 1][column].getCellValue()
             .toUpperCase();
-          if (
+          return (
             currentCellValue === nextRowValue &&
             currentCellValue === previousColumnValue
-          ) {
-            console.log(`winner in column: ${column}.`);
-            hasWinner = true;
-            break;
-          } else {
-            console.log(`No winner in column ${column}.`);
-          }
+          );
+
           break;
 
         case 2: // last row test previous two rows
@@ -473,16 +446,11 @@ function GameController(
             .getBoard()
             [row - 2][column].getCellValue()
             .toUpperCase();
-          if (
+          return (
             currentCellValue === previousRowValue &&
             currentCellValue === previousPreviousRowValue
-          ) {
-            console.log(`winner in column: ${column}.`);
-            hasWinner = true;
-            break;
-          } else {
-            console.log(`No winner in column ${column}.`);
-          }
+          );
+
           break;
 
         default:
@@ -490,35 +458,47 @@ function GameController(
       }
     };
 
-    const checkForTie = () => {
-      if (roundsPlayed > 8) {
-        console.log("we have a tie");
-      }
+    const checkForTie = (board) => {
+      let values = [];
+      board.map((row) => row.map((cell) => values.push(cell.getCellValue())));
+      return !values.includes("-");
     };
 
     // check for winner
-    checkForWinnerInRow(
-      board.getBoard()[row][column].getCellValue().toUpperCase(),
-      row,
-      column
-    );
-    checkForWinnerInColumn(
-      board.getBoard()[row][column].getCellValue().toUpperCase(),
-      row,
-      column
-    );
-    checkForDiagonalWinner(
-      board.getBoard()[row][column].getCellValue().toUpperCase(),
-      row,
-      column
-    );
+    hasWinner =
+      checkForWinnerInRow(
+        board.getBoard()[row][column].getCellValue().toUpperCase(),
+        row,
+        column
+      ) ||
+      checkForWinnerInColumn(
+        board.getBoard()[row][column].getCellValue().toUpperCase(),
+        row,
+        column
+      ) ||
+      checkForDiagonalWinner(
+        board.getBoard()[row][column].getCellValue().toUpperCase(),
+        row,
+        column
+      );
     // check for tie - not winner and all cells are either X or O
     if (!hasWinner) {
-      checkForTie();
+      hasTie = checkForTie(board.getBoard());
     }
     // switch the player turn and display the new state
-    switchPlayerTurn();
-    printNewRound();
+    if (!hasWinner && !hasTie) {
+      switchPlayerTurn();
+      printNewRound();
+    }
+
+    if (hasWinner) {
+      console.log(`${getActivePlayer().name} won!!!`);
+      board.printBoard();
+    }
+    if (hasTie && !hasWinner) {
+      console.log("There was a tie");
+      board.printBoard();
+    }
   };
 
   // display the initial state
