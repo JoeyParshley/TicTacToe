@@ -309,14 +309,27 @@ After getting the console version of the game working, the next step is to add t
 
 From the visual representation the author created a module `ScreenController`. This module will leverage an `updateScreen` pattern whose purpose is to take some data about the game, such as the state of the game board and whos turn it is, and update the screen each time a player takes their turn. [Here](https://replit.com/@40percentzinc/ConnectFourWithDOMSkeleton) is a link to the game with an HTML/CSS skeleton.
 
-```
+#### UI Explanation
 
-```
+Looking at the structure of the Connect Four game the HTML is a container wrapped around an H1 to display who's turn it is and a container to show the game board. It looks like the cells are added dynamicall with the `ScreenController` module.
 
-```
+The gameboard uses CSS Grid with a height and width of `500px`. TiC Tac Toe may need a little adjustment. (or may not)
 
-```
-
-```
-
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Connect Four HTML Skeleton</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+   <div class="container">
+     <h1 class="turn"></div>
+     <div class="board"></div>
+   </div>
+    <script src="script.js"></script>
+  </body>
+</html>
 ```
