@@ -204,7 +204,7 @@ function GameController(
       let lowerRightAdjacentCell;
       let lowerNextRightAdjacentCell;
 
-      switch (row) {
+      switch (parseInt(row)) {
         case 0: // top row
           if (column === 0) {
             // first column need to test lowerRight and lowerNextRight
@@ -334,7 +334,7 @@ function GameController(
       let previousPreviousColumnValue;
 
       // test each column in the row
-      switch (column) {
+      switch (parseInt(column)) {
         case 0: // first column   - test next two columns
           nextColumnValue = board
             .getBoard()
@@ -344,10 +344,12 @@ function GameController(
             .getBoard()
             [row][column + 2].getCellValue()
             .toUpperCase();
-          return (
+          if (
             currentCellValue === nextColumnValue &&
             currentCellValue === nextNextColumnValue
-          );
+          ) {
+            return true;
+          }
 
           break;
 
@@ -360,10 +362,12 @@ function GameController(
             .getBoard()
             [row][column - 1].getCellValue()
             .toUpperCase();
-          return (
+          if (
             currentCellValue === nextColumnValue &&
             currentCellValue === previousColumnValue
-          );
+          ) {
+            return true;
+          }
 
           break;
 
@@ -376,10 +380,12 @@ function GameController(
             .getBoard()
             [row][column - 2].getCellValue()
             .toUpperCase();
-          return (
+          if (
             currentCellValue === previousColumnValue &&
             currentCellValue === previousPreviousColumnValue
-          );
+          ) {
+            return true;
+          }
 
           break;
 
@@ -404,7 +410,7 @@ function GameController(
       let previousPreviousRowValue;
 
       // test each row in the row
-      switch (row) {
+      switch (parseInt(row)) {
         case 0: // top row test neext two rows
           nextRowValue = board
             .getBoard()
@@ -414,10 +420,12 @@ function GameController(
             .getBoard()
             [row + 2][column].getCellValue()
             .toUpperCase();
-          return (
+          if (
             currentCellValue === nextRowValue &&
             currentCellValue === nextNextRowValue
-          );
+          ) {
+            return true;
+          }
 
           break;
 
@@ -430,10 +438,12 @@ function GameController(
             .getBoard()
             [row - 1][column].getCellValue()
             .toUpperCase();
-          return (
+          if (
             currentCellValue === nextRowValue &&
             currentCellValue === previousColumnValue
-          );
+          ) {
+            return true;
+          }
 
           break;
 
@@ -446,10 +456,12 @@ function GameController(
             .getBoard()
             [row - 2][column].getCellValue()
             .toUpperCase();
-          return (
+          if (
             currentCellValue === previousRowValue &&
             currentCellValue === previousPreviousRowValue
-          );
+          ) {
+            return true;
+          }
 
           break;
 
@@ -488,21 +500,15 @@ function GameController(
     // switch the player turn and display the new state
     if (!hasWinner && !hasTie) {
       switchPlayerTurn();
-      printNewRound();
     }
 
     if (hasWinner) {
       console.log(`${getActivePlayer().name} won!!!`);
-      board.printBoard();
     }
     if (hasTie && !hasWinner) {
       console.log("There was a tie");
-      board.printBoard();
     }
   };
-
-  // display the initial state
-  printNewRound();
 
   // expose the public methods
   return {
@@ -511,3 +517,62 @@ function GameController(
     getBoard: board.getBoard,
   };
 }
+
+function ScreenController() {
+  // initiaize a new game instance
+  const game = GameController();
+
+  // get player turn h1 element and board div
+  const playerTurnH1 = document.querySelector(".turn");
+  const boardDiv = document.querySelector(".board");
+
+  // create updateScreen method
+  const updateScreen = () => {
+    // clear the board
+    boardDiv.textContent = "";
+
+    // get the newest version of the board and player turn
+    const board = game.getBoard();
+    const actvePlayer = game.getActivePlayer();
+
+    // display the player's turn
+    playerTurnH1.textContent = `${actvePlayer.name}'s turn . . . `;
+
+    // Render the squares
+    // loop through the rows
+    board.forEach((row, rowIndex) => {
+      // loop through the cells and track the index
+      row.forEach((cell, columnIndex) => {
+        // create a button
+        const cellButton = document.createElement("button");
+        // add a class of list
+        cellButton.classList.add("cell");
+        // add a column and row data attribute to hold the index of the column and row
+        cellButton.dataset.row = rowIndex;
+        cellButton.dataset.column = columnIndex;
+        // add the valuf of the cell
+        cellButton.textContent = cell.getCellValue();
+        // add the cell to the board
+        boardDiv.appendChild(cellButton);
+      });
+    });
+  };
+
+  // event listeners
+  function clickHandlerBoard(e) {
+    const selectedRow = e.target.dataset.row;
+    const selectedColumn = e.target.dataset.column;
+
+    if (!selectedRow || !selectedColumn) return;
+
+    game.playRound(selectedRow, selectedColumn);
+    updateScreen();
+  }
+  boardDiv.addEventListener("click", clickHandlerBoard);
+
+  // initial render
+  updateScreen();
+}
+
+// initalize the screenController instance
+ScreenController();
