@@ -177,7 +177,324 @@ function GameController(
 
     /**
      * test if the player is a winner
+     * start at row
      */
+
+    const checkForDiagonalWinner = (currentCellValue, row, column) => {
+      /**
+       * If row is 0, and column is 0 or 2:   - Can have diagonal winner
+       * If row is 2, and column is 0 or 2:   - can have diagonal winner
+       * If row is 1, and column is 1         - can have diagonal winner
+       */
+
+      let upperLeftAdjacentCell;
+      let upperNextLeftAdjacentCell;
+      let upperRightAdjacentCell;
+      let upperNextRightAdjacentCell;
+      let lowerLeftAdjacentCell;
+      let lowerNextLeftAdjacentCell;
+      let lowerRightAdjacentCell;
+      let lowerNextRightAdjacentCell;
+
+      switch (row) {
+        case 0: // top row
+          if (column === 0) {
+            // first column need to test lowerRight and lowerNextRight
+            lowerRightAdjacentCell = board
+              .getBoard()
+              [row + 1][column + 1].getCellValue()
+              .toUpperCase();
+            lowerNextRightAdjacentCell = board
+              .getBoard()
+              [row + 2][column + 2].getCellValue()
+              .toUpperCase();
+            if (
+              currentCellValue === lowerRightAdjacentCell &&
+              currentCellValue === lowerNextRightAdjacentCell
+            ) {
+              console.log(`Winner in diagonal row`);
+              break;
+            } else {
+              console.log(`No diagonal winner`);
+            }
+          } else if (column === 2) {
+            // last column need to test lowerLeft and lowerNextLeft
+            lowerLeftAdjacentCell = board
+              .getBoard()
+              [row + 1][column - 1].getCellValue()
+              .toUpperCase();
+            lowerNextLeftAdjacentCell = board
+              .getBoard()
+              [row + 2][column - 2].getCellValue()
+              .toUpperCase();
+            if (
+              currentCellValue === lowerLeftAdjacentCell &&
+              currentCellValue === lowerNextLeftAdjacentCell
+            ) {
+              console.log(`Winner in diagonal row`);
+              break;
+            } else {
+              console.log(`No diagonal winner`);
+            }
+          }
+
+          break;
+
+        case 1: // middle row
+          if (column === 1) {
+            // middle column need to test (upperLeft and lowerRight) and (upperRight and lowerLeft)
+            upperLeftAdjacentCell = board
+              .getBoard()
+              [row - 1][column - 1].getCellValue()
+              .toUpperCase();
+            lowerRightAdjacentCell = board
+              .getBoard()
+              [row + 1][column + 1].getCellValue()
+              .toUpperCase();
+            upperRightAdjacentCell = board
+              .getBoard()
+              [row - 1][column + 1].getCellValue()
+              .toUpperCase();
+            lowerLeftAdjacentCell = board
+              .getBoard()
+              [row + 1][column - 1].getCellValue()
+              .toUpperCase();
+            if (
+              (currentCellValue === upperLeftAdjacentCell &&
+                currentCellValue === lowerRightAdjacentCell) ||
+              (currentCellValue === upperRightAdjacentCell &&
+                currentCellValue === lowerLeftAdjacentCell)
+            ) {
+              console.log(`Winner in diagonal row`);
+              break;
+            } else {
+              console.log(`No diagonal winner`);
+            }
+          }
+
+          break;
+
+        case 2: // Bottom Row
+          if (column === 0) {
+            // first column need to test upperRight and upperNextRight
+            upperRightAdjacentCell = board
+              .getBoard()
+              [row - 1][column + 1].getCellValue()
+              .toUpperCase();
+            upperNextRightAdjacentCell = board
+              .getBoard()
+              [row - 2][column + 2].getCellValue()
+              .toUpperCase();
+            if (
+              currentCellValue === upperRightAdjacentCell &&
+              currentCellValue === upperNextRightAdjacentCell
+            ) {
+              console.log(`Winner in diagonal row`);
+              break;
+            }
+          } else if (column === 2) {
+            // last column need to test upperLeft and upperNextLeft
+            upperLeftAdjacentCell = board
+              .getBoard()
+              [row - 1][column - 1].getCellValue()
+              .toUpperCase();
+            upperNextLeftAdjacentCell = board
+              .getBoard()
+              [row - 2][column - 2].getCellValue()
+              .toUpperCase();
+            if (
+              currentCellValue === upperLeftAdjacentCell &&
+              currentCellValue === upperNextLeftAdjacentCell
+            ) {
+              console.log(`Winner in diagonal row`);
+              break;
+            }
+          }
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    const checkForWinnerInRow = (currentCellValue, row, column) => {
+      /**
+       * Test for three matches in the current row
+       *
+       * If the column index is:
+       *  - 0, check col[1] and col[2] for row winner
+       *  - 1, check col[0] and col[2] for row winner
+       *  - 2, check col[1] and col[0] for row winner
+       */
+
+      let nextColumnValue;
+      let nextNextColumnValue;
+      let previousColumnValue;
+      let previousPreviousColumnValue;
+
+      // test each column in the row
+      switch (column) {
+        case 0: // first column   - test next two columns
+          nextColumnValue = board
+            .getBoard()
+            [row][column + 1].getCellValue()
+            .toUpperCase();
+          nextNextColumnValue = board
+            .getBoard()
+            [row][column + 2].getCellValue()
+            .toUpperCase();
+          if (
+            currentCellValue === nextColumnValue &&
+            currentCellValue === nextNextColumnValue
+          ) {
+            console.log(`winner in row: ${row}.`);
+            break;
+          } else {
+            console.log(`No winner in row ${row}.`);
+          }
+          break;
+
+        case 1: // middle column test previous and next columns
+          nextColumnValue = board
+            .getBoard()
+            [row][column + 1].getCellValue()
+            .toUpperCase();
+          previousColumnValue = board
+            .getBoard()
+            [row][column - 1].getCellValue()
+            .toUpperCase();
+          if (
+            currentCellValue === nextColumnValue &&
+            currentCellValue === previousColumnValue
+          ) {
+            console.log(`winner in row: ${row}.`);
+          } else {
+            console.log(`No winner in row ${row}.`);
+          }
+          break;
+
+        case 2: // last column test previous two columns
+          previousColumnValue = board
+            .getBoard()
+            [row][column - 1].getCellValue()
+            .toUpperCase();
+          previousPreviousColumnValue = board
+            .getBoard()
+            [row][column - 2].getCellValue()
+            .toUpperCase();
+          if (
+            currentCellValue === previousColumnValue &&
+            currentCellValue === previousPreviousColumnValue
+          ) {
+            console.log(`winner in row: ${row}.`);
+          } else {
+            console.log(`No winner in row ${row}.`);
+          }
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    const checkForWinnerInColumn = (currentCellValue, row, column) => {
+      /**
+       * Test for three matches in the current column
+       *
+       * If the row index is:
+       *  - 0, check 1 and 1
+       *  - 1, check 0 and 2
+       *  - 2, check 1 and 0
+       */
+
+      let nextRowValue;
+      let nextNextRowValue;
+      let previousRowValue;
+      let previousPreviousRowValue;
+
+      // test each row in the row
+      switch (row) {
+        case 0: // top row test neext two rows
+          nextRowValue = board
+            .getBoard()
+            [row + 1][column].getCellValue()
+            .toUpperCase();
+          nextNextRowValue = board
+            .getBoard()
+            [row + 2][column].getCellValue()
+            .toUpperCase();
+          if (
+            currentCellValue === nextRowValue &&
+            currentCellValue === nextNextRowValue
+          ) {
+            console.log(`winner in column: ${column}.`);
+            break;
+          } else {
+            console.log(`No winner in column ${column}.`);
+          }
+          break;
+
+        case 1: // middle row test previous and next row
+          nextRowValue = board
+            .getBoard()
+            [row + 1][column].getCellValue()
+            .toUpperCase();
+          previousColumnValue = board
+            .getBoard()
+            [row - 1][column].getCellValue()
+            .toUpperCase();
+          if (
+            currentCellValue === nextRowValue &&
+            currentCellValue === previousColumnValue
+          ) {
+            console.log(`winner in column: ${column}.`);
+            break;
+          } else {
+            console.log(`No winner in column ${column}.`);
+          }
+          break;
+
+        case 2: // last row test previous two rows
+          previousRowValue = board
+            .getBoard()
+            [row - 1][column].getCellValue()
+            .toUpperCase();
+          previousPreviousRowValue = board
+            .getBoard()
+            [row - 2][column].getCellValue()
+            .toUpperCase();
+          if (
+            currentCellValue === previousRowValue &&
+            currentCellValue === previousPreviousRowValue
+          ) {
+            console.log(`winner in column: ${column}.`);
+            break;
+          } else {
+            console.log(`No winner in column ${column}.`);
+          }
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    // check for winner
+    checkForWinnerInRow(
+      board.getBoard()[row][column].getCellValue().toUpperCase(),
+      row,
+      column
+    );
+    checkForWinnerInColumn(
+      board.getBoard()[row][column].getCellValue().toUpperCase(),
+      row,
+      column
+    );
+    checkForDiagonalWinner(
+      board.getBoard()[row][column].getCellValue().toUpperCase(),
+      row,
+      column
+    );
 
     // switch the player turn and display the new state
     switchPlayerTurn();

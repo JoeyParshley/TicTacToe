@@ -289,6 +289,16 @@ const playRound = (column) => {
 };
 ```
 
+###### Determining the Winner or a Tie for Tic Tac Toe
+
+A winner is three consecutive cells in a row of the same player token. A tie occurs when all cells have an `X` or and `O`. After each players token is dropped onto a cell determine id there is a winner. Starting from the selected cell test the previous two cells in all directions. Maybe use a switch. To do this.
+
+- detemine what cell is selected `board[row][column]`
+- start from the `row` and check the other cells in that row and count the values
+- then do it for the `column` and get the other values for the cells in that [column]
+- if the seleced cell is any corner or the center cell check in the diaganol directions.
+- if at index `0` or `2` only step in the up or down respectively
+
 ###### Expose the methods
 
 For the console-version we only need the `playRound` method but the UI will need `getAActivePlayer`
