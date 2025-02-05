@@ -204,17 +204,17 @@ function GameController(
       let lowerRightAdjacentCell;
       let lowerNextRightAdjacentCell;
 
-      switch (parseInt(row)) {
-        case 0: // top row
+      switch (row) {
+        case "0": // top row
           if (column === 0) {
             // first column need to test lowerRight and lowerNextRight
             lowerRightAdjacentCell = board
               .getBoard()
-              [row + 1][column + 1].getCellValue()
+              [+row + 1][+column + 1].getCellValue()
               .toUpperCase();
             lowerNextRightAdjacentCell = board
               .getBoard()
-              [row + 2][column + 2].getCellValue()
+              [+row + 2][+column + 2].getCellValue()
               .toUpperCase();
             if (
               currentCellValue === lowerRightAdjacentCell &&
@@ -227,11 +227,11 @@ function GameController(
             // last column need to test lowerLeft and lowerNextLeft
             lowerLeftAdjacentCell = board
               .getBoard()
-              [row + 1][column - 1].getCellValue()
+              [+row + 1][+column - 1].getCellValue()
               .toUpperCase();
             lowerNextLeftAdjacentCell = board
               .getBoard()
-              [row + 2][column - 2].getCellValue()
+              [+row + 2][+column - 2].getCellValue()
               .toUpperCase();
             if (
               currentCellValue === lowerLeftAdjacentCell &&
@@ -244,24 +244,24 @@ function GameController(
 
           break;
 
-        case 1: // middle row
+        case "1": // middle row
           if (column === 1) {
             // middle column need to test (upperLeft and lowerRight) and (upperRight and lowerLeft)
             upperLeftAdjacentCell = board
               .getBoard()
-              [row - 1][column - 1].getCellValue()
+              [+row - 1][+column - 1].getCellValue()
               .toUpperCase();
             lowerRightAdjacentCell = board
               .getBoard()
-              [row + 1][column + 1].getCellValue()
+              [+row + 1][+column + 1].getCellValue()
               .toUpperCase();
             upperRightAdjacentCell = board
               .getBoard()
-              [row - 1][column + 1].getCellValue()
+              [+row - 1][+column + 1].getCellValue()
               .toUpperCase();
             lowerLeftAdjacentCell = board
               .getBoard()
-              [row + 1][column - 1].getCellValue()
+              [+row + 1][+column - 1].getCellValue()
               .toUpperCase();
             if (
               (currentCellValue === upperLeftAdjacentCell &&
@@ -276,16 +276,16 @@ function GameController(
 
           break;
 
-        case 2: // Bottom Row
+        case "2": // Bottom Row
           if (column === 0) {
             // first column need to test upperRight and upperNextRight
             upperRightAdjacentCell = board
               .getBoard()
-              [row - 1][column + 1].getCellValue()
+              [+row - 1][+column + 1].getCellValue()
               .toUpperCase();
             upperNextRightAdjacentCell = board
               .getBoard()
-              [row - 2][column + 2].getCellValue()
+              [+row - 2][+column + 2].getCellValue()
               .toUpperCase();
             if (
               currentCellValue === upperRightAdjacentCell &&
@@ -298,11 +298,11 @@ function GameController(
             // last column need to test upperLeft and upperNextLeft
             upperLeftAdjacentCell = board
               .getBoard()
-              [row - 1][column - 1].getCellValue()
+              [+row - 1][+column - 1].getCellValue()
               .toUpperCase();
             upperNextLeftAdjacentCell = board
               .getBoard()
-              [row - 2][column - 2].getCellValue()
+              [+row - 2][+column - 2].getCellValue()
               .toUpperCase();
             if (
               currentCellValue === upperLeftAdjacentCell &&
@@ -332,17 +332,16 @@ function GameController(
       let nextNextColumnValue;
       let previousColumnValue;
       let previousPreviousColumnValue;
-
       // test each column in the row
-      switch (parseInt(column)) {
-        case 0: // first column   - test next two columns
+      switch (column) {
+        case "0": // first column   - test next two columns
           nextColumnValue = board
             .getBoard()
-            [row][column + 1].getCellValue()
+            [row][+column + 1].getCellValue()
             .toUpperCase();
           nextNextColumnValue = board
             .getBoard()
-            [row][column + 2].getCellValue()
+            [row][+column + 2].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextColumnValue &&
@@ -353,14 +352,14 @@ function GameController(
 
           break;
 
-        case 1: // middle column test previous and next columns
+        case "1": // middle column test previous and next columns
           nextColumnValue = board
             .getBoard()
-            [row][column + 1].getCellValue()
+            [row][+column + 1].getCellValue()
             .toUpperCase();
           previousColumnValue = board
             .getBoard()
-            [row][column - 1].getCellValue()
+            [row][+column - 1].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextColumnValue &&
@@ -371,14 +370,14 @@ function GameController(
 
           break;
 
-        case 2: // last column test previous two columns
+        case "2": // last column test previous two columns
           previousColumnValue = board
             .getBoard()
-            [row][column - 1].getCellValue()
+            [row][+column - 1].getCellValue()
             .toUpperCase();
           previousPreviousColumnValue = board
             .getBoard()
-            [row][column - 2].getCellValue()
+            [row][+column - 2].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === previousColumnValue &&
@@ -410,15 +409,15 @@ function GameController(
       let previousPreviousRowValue;
 
       // test each row in the row
-      switch (parseInt(row)) {
-        case 0: // top row test neext two rows
+      switch (row) {
+        case "0": // top row test neext two rows
           nextRowValue = board
             .getBoard()
-            [row + 1][column].getCellValue()
+            [+row + 1][column].getCellValue()
             .toUpperCase();
           nextNextRowValue = board
             .getBoard()
-            [row + 2][column].getCellValue()
+            [+row + 2][column].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextRowValue &&
@@ -429,14 +428,14 @@ function GameController(
 
           break;
 
-        case 1: // middle row test previous and next row
+        case "1": // middle row test previous and next row
           nextRowValue = board
             .getBoard()
-            [row + 1][column].getCellValue()
+            [+row + 1][column].getCellValue()
             .toUpperCase();
           previousColumnValue = board
             .getBoard()
-            [row - 1][column].getCellValue()
+            [+row - 1][column].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextRowValue &&
@@ -447,14 +446,14 @@ function GameController(
 
           break;
 
-        case 2: // last row test previous two rows
+        case "2": // last row test previous two rows
           previousRowValue = board
             .getBoard()
-            [row - 1][column].getCellValue()
+            [+row - 1][column].getCellValue()
             .toUpperCase();
           previousPreviousRowValue = board
             .getBoard()
-            [row - 2][column].getCellValue()
+            [+row - 2][column].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === previousRowValue &&
@@ -493,6 +492,7 @@ function GameController(
         row,
         column
       );
+
     // check for tie - not winner and all cells are either X or O
     if (!hasWinner) {
       hasTie = checkForTie(board.getBoard());
@@ -504,6 +504,9 @@ function GameController(
 
     if (hasWinner) {
       console.log(`${getActivePlayer().name} won!!!`);
+      document.querySelector(".turn").textContent = `${
+        getActivePlayer().name
+      } won!!!`;
     }
     if (hasTie && !hasWinner) {
       console.log("There was a tie");
