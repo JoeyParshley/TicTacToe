@@ -126,6 +126,8 @@ function GameController(
 ) {
   // instantiate the GameBoard
   const board = Gameboard();
+  let roundsPlayed = 0;
+  let hasWinner = false;
 
   // initialize the players
   players = [
@@ -174,6 +176,7 @@ function GameController(
 
     // drop current players token into the selcted spot
     board.dropToken(row, column, getActivePlayer().token);
+    ++roundsPlayed;
 
     /**
      * test if the player is a winner
@@ -213,6 +216,7 @@ function GameController(
               currentCellValue === lowerNextRightAdjacentCell
             ) {
               console.log(`Winner in diagonal row`);
+              hasWinner = true;
               break;
             } else {
               console.log(`No diagonal winner`);
@@ -266,6 +270,7 @@ function GameController(
                 currentCellValue === lowerLeftAdjacentCell)
             ) {
               console.log(`Winner in diagonal row`);
+              hasWinner = true;
               break;
             } else {
               console.log(`No diagonal winner`);
@@ -307,6 +312,7 @@ function GameController(
               currentCellValue === upperNextLeftAdjacentCell
             ) {
               console.log(`Winner in diagonal row`);
+              hasWinner = true;
               break;
             }
           }
@@ -368,6 +374,7 @@ function GameController(
             currentCellValue === previousColumnValue
           ) {
             console.log(`winner in row: ${row}.`);
+            hasWinner = true;
           } else {
             console.log(`No winner in row ${row}.`);
           }
@@ -387,6 +394,7 @@ function GameController(
             currentCellValue === previousPreviousColumnValue
           ) {
             console.log(`winner in row: ${row}.`);
+            hasWinner = true;
           } else {
             console.log(`No winner in row ${row}.`);
           }
@@ -428,6 +436,7 @@ function GameController(
             currentCellValue === nextNextRowValue
           ) {
             console.log(`winner in column: ${column}.`);
+            hasWinner = true;
             break;
           } else {
             console.log(`No winner in column ${column}.`);
@@ -448,6 +457,7 @@ function GameController(
             currentCellValue === previousColumnValue
           ) {
             console.log(`winner in column: ${column}.`);
+            hasWinner = true;
             break;
           } else {
             console.log(`No winner in column ${column}.`);
@@ -468,6 +478,7 @@ function GameController(
             currentCellValue === previousPreviousRowValue
           ) {
             console.log(`winner in column: ${column}.`);
+            hasWinner = true;
             break;
           } else {
             console.log(`No winner in column ${column}.`);
@@ -476,6 +487,12 @@ function GameController(
 
         default:
           break;
+      }
+    };
+
+    const checkForTie = () => {
+      if (roundsPlayed > 8) {
+        console.log("we have a tie");
       }
     };
 
@@ -495,7 +512,10 @@ function GameController(
       row,
       column
     );
-
+    // check for tie - not winner and all cells are either X or O
+    if (!hasWinner) {
+      checkForTie();
+    }
     // switch the player turn and display the new state
     switchPlayerTurn();
     printNewRound();
