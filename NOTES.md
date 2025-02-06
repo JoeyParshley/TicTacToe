@@ -333,3 +333,27 @@ The gameboard uses CSS Grid with a height and width of `500px`. TiC Tac Toe may 
   </body>
 </html>
 ```
+
+#### UI Clean up
+
+The remaining steps for this project are:
+
+- allow players to put in their names,
+- include a button to start/restart the game and
+- add a display element that shows the results upon game end!
+
+##### Allow players to enter names
+
+- create form fields
+- create submit button
+- Update data based on user input
+
+##### Start / Restart Button
+
+- add button
+- have grid be disanled until button is pressed
+- Use start button in user form
+
+##### Game Status Display
+
+- Clean up behavior

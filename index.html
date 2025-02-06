@@ -5,10 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/ticTacToe.css" />
     <script src="./scripts/ticTacToe.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <title>Tic Tac Toe</title>
   </head>
   <body>
     <div class="container">
+      <form action="#">
+        <fieldset>
+          <label for="player-1">Player One</label
+          ><input type="text" id="player-1" name="player-1" />
+        </fieldset>
+        <fieldset>
+          <label for="player-2">Player Two</label
+          ><input type="text" id="player-2" name="player-2" />
+        </fieldset>
+        <fieldset class="buttons">
+          <button id="start">Start Game</button>
+          <button id="reset">Reset Game</button>
+        </fieldset>
+      </form>
+
       <h1 class="turn"></h1>
       <div class="board"></div>
     </div>
