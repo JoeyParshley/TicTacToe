@@ -168,15 +168,6 @@ function GameController(
 
   const getHasTie = () => hasTie;
 
-  /**
-   * starts a new round by displaying the current state of the board and stating
-   * that it is the next players turn.
-   */
-  const printNewRound = () => {
-    board.printBoard();
-    console.log(`${getActivePlayer().name}'s turn.`);
-  };
-
   const playRound = (row, column) => {
     if (row < 0 || row > 2 || column < 0 || column > 2) {
       console.error(
