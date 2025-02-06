@@ -157,6 +157,10 @@ function GameController(
    */
   const getActivePlayer = () => activePlayer;
 
+  const getHasWinner = () => hasWinner;
+
+  const getHasTie = () => hasTie;
+
   /**
    * starts a new round by displaying the current state of the board and stating
    * that it is the next players turn.
@@ -169,11 +173,12 @@ function GameController(
   const playRound = (row, column) => {
     if (row < 0 || row > 2 || column < 0 || column > 2) {
       console.error(
-        "Row and column must be betwwen 0 adn 2. Try again please."
+        "Row and column must be betwwen 0 and 2. Try again please."
       );
       return;
     }
     // console current players choice
+    // TODO: Create a toast for this or something like it
     console.log(
       `Dropping ${
         getActivePlayer().name
@@ -517,10 +522,17 @@ function GameController(
   return {
     playRound,
     getActivePlayer,
+    getHasTie,
+    getHasWinner,
     getBoard: board.getBoard,
   };
 }
 
+/**
+ * ScreenController Module
+ *
+ *
+ */
 function ScreenController() {
   // initiaize a new game instance
   const game = GameController();
@@ -528,6 +540,10 @@ function ScreenController() {
   // get player turn h1 element and board div
   const playerTurnH1 = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
+
+  /**
+   * TODO: Freeze the game when there is a winner of a tie
+   */
 
   // create updateScreen method
   const updateScreen = () => {
@@ -537,9 +553,17 @@ function ScreenController() {
     // get the newest version of the board and player turn
     const board = game.getBoard();
     const actvePlayer = game.getActivePlayer();
+    const hasWinner = game.getHasWinner();
+    const hasTie = game.getHasTie();
 
     // display the player's turn
-    playerTurnH1.textContent = `${actvePlayer.name}'s turn . . . `;
+    if (hasWinner) {
+      playerTurnH1.textContent = `${actvePlayer.name} is the Winner!!!`;
+    } else if (hasTie) {
+      playerTurnH1.textContent = `Ther was a tie :/`;
+    } else {
+      playerTurnH1.textContent = `${actvePlayer.name}'s turn . . . `;
+    }
 
     // Render the squares
     // loop through the rows
@@ -556,6 +580,7 @@ function ScreenController() {
         // add the valuf of the cell
         cellButton.textContent = cell.getCellValue();
         // add the cell to the board
+        if (hasWinner || hasTie) cellButton.disabled = true;
         boardDiv.appendChild(cellButton);
       });
     });
