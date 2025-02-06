@@ -26,7 +26,7 @@ function Gameboard() {
 
   /**
    * Getter for the `board`
-   * @returns board
+   * @returns board  - Array of cells
    */
   const getBoard = () => board;
 
@@ -208,65 +208,63 @@ function GameController(
       let lowerNextLeftAdjacentCell;
       let lowerRightAdjacentCell;
       let lowerNextRightAdjacentCell;
-
       switch (row) {
         case "0": // top row
-          if (column === 0) {
+          if (column === "0") {
             // first column need to test lowerRight and lowerNextRight
             lowerRightAdjacentCell = board
-              .getBoard()
-              [+row + 1][+column + 1].getCellValue()
+              .getBoard()[1][1]
+              .getCellValue()
               .toUpperCase();
             lowerNextRightAdjacentCell = board
-              .getBoard()
-              [+row + 2][+column + 2].getCellValue()
+              .getBoard()[2][2]
+              .getCellValue()
               .toUpperCase();
             if (
               currentCellValue === lowerRightAdjacentCell &&
               currentCellValue === lowerNextRightAdjacentCell
             ) {
-              hasWinner = true;
+              return true;
               break;
             }
-          } else if (column === 2) {
+          } else if (column === "2") {
             // last column need to test lowerLeft and lowerNextLeft
             lowerLeftAdjacentCell = board
-              .getBoard()
-              [+row + 1][+column - 1].getCellValue()
+              .getBoard()[1][1]
+              .getCellValue()
               .toUpperCase();
             lowerNextLeftAdjacentCell = board
-              .getBoard()
-              [+row + 2][+column - 2].getCellValue()
+              .getBoard()[2][0]
+              .getCellValue()
               .toUpperCase();
             if (
               currentCellValue === lowerLeftAdjacentCell &&
               currentCellValue === lowerNextLeftAdjacentCell
             ) {
-              hasWinner = true;
-              break;
+              return true;
             }
           }
 
           break;
 
         case "1": // middle row
-          if (column === 1) {
+          if (column === "1") {
             // middle column need to test (upperLeft and lowerRight) and (upperRight and lowerLeft)
             upperLeftAdjacentCell = board
-              .getBoard()
-              [+row - 1][+column - 1].getCellValue()
+              .getBoard()[0][0]
+              .getCellValue()
               .toUpperCase();
             lowerRightAdjacentCell = board
-              .getBoard()
-              [+row + 1][+column + 1].getCellValue()
+              .getBoard()[2][2]
+              .getCellValue()
               .toUpperCase();
             upperRightAdjacentCell = board
-              .getBoard()
-              [+row - 1][+column + 1].getCellValue()
+              .getBoard()[0][2]
+              .getCellValue()
               .toUpperCase();
             lowerLeftAdjacentCell = board
-              .getBoard()
-              [+row + 1][+column - 1].getCellValue()
+              .getBoard()[2][0]
+              .getCellValue()
               .toUpperCase();
             if (
               (currentCellValue === upperLeftAdjacentCell &&
@@ -274,46 +272,44 @@ function GameController(
               (currentCellValue === upperRightAdjacentCell &&
                 currentCellValue === lowerLeftAdjacentCell)
             ) {
-              hasWinner = true;
-              break;
+              return true;
             }
           }
 
           break;
 
         case "2": // Bottom Row
-          if (column === 0) {
+          if (column === "0") {
             // first column need to test upperRight and upperNextRight
             upperRightAdjacentCell = board
-              .getBoard()
-              [+row - 1][+column + 1].getCellValue()
+              .getBoard()[1][1]
+              .getCellValue()
               .toUpperCase();
             upperNextRightAdjacentCell = board
-              .getBoard()
-              [+row - 2][+column + 2].getCellValue()
+              .getBoard()[0][2]
+              .getCellValue()
               .toUpperCase();
             if (
               currentCellValue === upperRightAdjacentCell &&
               currentCellValue === upperNextRightAdjacentCell
             ) {
-              hasWinner = true;
-              break;
+              return true;
             }
-          } else if (column === 2) {
+          } else if (column === "2") {
             // last column need to test upperLeft and upperNextLeft
             upperLeftAdjacentCell = board
-              .getBoard()
-              [+row - 1][+column - 1].getCellValue()
+              .getBoard()[1][1]
+              .getCellValue()
               .toUpperCase();
             upperNextLeftAdjacentCell = board
-              .getBoard()
-              [+row - 2][+column - 2].getCellValue()
+              .getBoard()[0][0]
+              .getCellValue()
               .toUpperCase();
             if (
               currentCellValue === upperLeftAdjacentCell &&
               currentCellValue === upperNextLeftAdjacentCell
             ) {
-              hasWinner = true;
+              return true;
             }
           }
           break;
@@ -342,11 +338,11 @@ function GameController(
         case "0": // first column   - test next two columns
           nextColumnValue = board
             .getBoard()
-            [row][+column + 1].getCellValue()
+            [row][1].getCellValue()
             .toUpperCase();
           nextNextColumnValue = board
             .getBoard()
-            [row][+column + 2].getCellValue()
+            [row][2].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextColumnValue &&
@@ -360,11 +356,11 @@ function GameController(
         case "1": // middle column test previous and next columns
           nextColumnValue = board
             .getBoard()
-            [row][+column + 1].getCellValue()
+            [row][2].getCellValue()
             .toUpperCase();
           previousColumnValue = board
             .getBoard()
-            [row][+column - 1].getCellValue()
+            [row][0].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextColumnValue &&
@@ -378,11 +374,11 @@ function GameController(
         case "2": // last column test previous two columns
           previousColumnValue = board
             .getBoard()
-            [row][+column - 1].getCellValue()
+            [row][1].getCellValue()
             .toUpperCase();
           previousPreviousColumnValue = board
             .getBoard()
-            [row][+column - 2].getCellValue()
+            [row][0].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === previousColumnValue &&
@@ -417,12 +413,12 @@ function GameController(
       switch (row) {
         case "0": // top row test neext two rows
           nextRowValue = board
-            .getBoard()
-            [+row + 1][column].getCellValue()
+            .getBoard()[1]
+            [column].getCellValue()
             .toUpperCase();
           nextNextRowValue = board
-            .getBoard()
-            [+row + 2][column].getCellValue()
+            .getBoard()[2]
+            [column].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextRowValue &&
@@ -435,12 +431,12 @@ function GameController(
 
         case "1": // middle row test previous and next row
           nextRowValue = board
-            .getBoard()
-            [+row + 1][column].getCellValue()
+            .getBoard()[2]
+            [column].getCellValue()
             .toUpperCase();
           previousColumnValue = board
-            .getBoard()
-            [+row - 1][column].getCellValue()
+            .getBoard()[0]
+            [column].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === nextRowValue &&
@@ -453,12 +449,12 @@ function GameController(
 
         case "2": // last row test previous two rows
           previousRowValue = board
-            .getBoard()
-            [+row - 1][column].getCellValue()
+            .getBoard()[1]
+            [column].getCellValue()
             .toUpperCase();
           previousPreviousRowValue = board
-            .getBoard()
-            [+row - 2][column].getCellValue()
+            .getBoard()[0]
+            [column].getCellValue()
             .toUpperCase();
           if (
             currentCellValue === previousRowValue &&
