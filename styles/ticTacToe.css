@@ -68,3 +68,27 @@ form {
   background: lightyellow;
   cursor: pointer;
 }
+
+dialog {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgb(67, 69, 70);
+  grid-template-rows: repeat(3, 1fr);
+  h2 {
+    color: darkred;
+  }
+  button {
+    background: rgb(25, 146, 212);
+    box-shadow: 5px 5px 10px gray;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 20px;
+    margin: auto;
+    color: white;
+    cursor: pointer;
+    &:hover {
+      box-shadow: 2px 2px 5px gray;
+    }
+  }
+}

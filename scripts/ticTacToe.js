@@ -534,6 +534,10 @@ function ScreenController() {
   // get player turn h1 element and board div
   const playerTurnH1 = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
+  const dialog = document.querySelector("dialog");
+  const dialog_header = document.querySelector("dialog h2");
+  const dialog_paragraph = document.querySelector("dialog p");
+  const ok_button = document.querySelector("dialog button");
 
   /**
    * TODO: Freeze the game when there is a winner of a tie
@@ -607,11 +611,14 @@ function ScreenController() {
       game.playRound(selectedRow, selectedColumn);
       updateScreen();
     } else {
-      console.log("Please select another cell");
+      dialog_header.textContent = "This cell was already selected!";
+      dialog_paragraph.textContent = "Please choose another square.";
+      dialog.showModal();
     }
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
   startButton.addEventListener("click", clickHandlerStartButton);
+  ok_button.addEventListener("click", () => dialog.close());
 
   // initial render
   updateScreen();
