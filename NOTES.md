@@ -357,3 +357,181 @@ The remaining steps for this project are:
 ##### Game Status Display
 
 - Clean up behavior
+
+##### Issues
+
+Trying to get the players' names to show up in the `.turn` `h1` element. This is there it should say "Daddy's turn". It is set up to say 'Player One's turn by default'. So far no matter what I am doind it does not update `H1` element to repesent the values in the player text fields.
+
+The text fields have been added to the HTML:
+
+```html
+...
+<fieldset>
+  <label for="player-1">Player One</label
+  ><input type="text" id="player-1" name="player-1" />
+</fieldset>
+<fieldset>
+  <label for="player-2">Player Two</label
+  ><input type="text" id="player-2" name="player-2" />
+</fieldset>
+<fieldset class="buttons">
+  <button id="start">Start Game</button>
+  <button id="reset">Reset Game</button>
+</fieldset>
+...
+```
+
+An event listener was added to the start button in the same location that the board click handler is.
+
+When the `GameController()` is instantiated, the default values for `playerOneName` and `playerTwoName` are `PlayerOne` and `PlayerTwo` respectively. The `players` array then gets initalized to those values.
+
+```js
+function GameController(
+  playerOneName = "PlayerOne",
+  playerTwoName = "PlayerTwo"
+) {
+
+  ...
+// initialize the players
+  players = [
+    {
+      name: playerOneName,
+      token: "X",
+    },
+    {
+      name: playerTwoName,
+      token: "O",
+    },
+  ];
+
+}
+```
+
+I think I need to pass the values of the player's text fields into the call to the `GameController()`.
+
+The `ScreenController()` module instantiates the game:
+
+```js
+function ScreenController() {
+  // initiaize a new game instance
+  const game = GameController();
+  ...
+}
+```
+
+Nothing is getting passed into the `GameController` so the game gets instantiated to have the default player names.
+
+If I pass in some strings for the players' names:
+
+```js
+function ScreenController() {
+  // initiaize a new game instance
+  const game = GameController('Daddy', 'RJ');
+```
+
+Those names are reflected in the UI correctly.
+
+However I cannot get the names to pass from the value of the players' texet fields into the game to be reflected in the UI.
+
+Think I need to call `updateScreen()` in my new handler or find a way to instantiate the game with the names from the players' text fields.
+
+###### Calling `updateScreen()` from click handler
+
+Added some setters for `playerOneName` and `playerTwoName` to the `GameController`.
+
+```js
+...
+  const setPlayerOneName = (playerName) => (playerOneName = playerName);
+
+  const setPlayerTwoName = (playerName) => (playerTwoName = playerName);
+  ...
+```
+
+And then call them in the Event Handler and call `updateScreen()`'
+
+```js
+function clickHandlerStartButton(e) {
+  // get the playerOne and playerTwo field values
+  const playerOneField = document.querySelector("#player-1");
+  const playerTwoField = document.querySelector("#player-2");
+  // set the value of player
+  game.setPlayerOneName(playerOneField.value);
+  game.setPlayerTwoName(playerTwoField.value);
+
+  updateScreen();
+}
+```
+
+And then call the handler function to handle the start button click event.
+
+```js
+startButton.addEventListener("click", clickHandlerStartButton);
+```
+
+That did not work so must have to pass the values into the call to `GameController()`
+
+Maybe try calling the gamecontroller from the click handler?
+
+Looks like what I need to do is update the players object.
+
+###### Solution
+
+In order to change the player names in the UI, had to add setter functions for the player names in the `GameController()`.
+
+```js
+...
+  players = [
+    {
+      name: playerOneName,
+      token: "X",
+    },
+    {
+      name: playerTwoName,
+      token: "O",
+    },
+  ];
+...
+const setPlayerOneName = (playerName) => (players[0].name = playerName);
+
+const setPlayerTwoName = (playerName) => (players[1].name = playerName);
+...
+
+```
+
+Then need to expose those methods.
+
+```js
+return {
+  playRound,
+  getActivePlayer,
+  getHasTie,
+  getHasWinner,
+  getBoard: board.getBoard,
+  setPlayerOneName,
+  setPlayerTwoName,
+};
+```
+
+In the Event listener for the click event on the start button, call the setter methods passing in the values of the form fields. Being sure to call `updateScreen()` to update the view with the changed names.
+
+```js
+const startButton = document.querySelector("#start");
+// event listeners
+function clickHandlerStartButton(e) {
+  e.preventDefault();
+  // get the playerOne and playerTwo field values
+  const playerOneField = document.querySelector("#player-1");
+  const playerTwoField = document.querySelector("#player-2");
+
+  // set the name values of the users in the users object of the game instance.
+  game.setPlayerOneName(playerOneField.value);
+  game.setPlayerTwoName(playerTwoField.value);
+
+  updateScreen();
+}
+
+...
+
+  startButton.addEventListener("click", clickHandlerStartButton);
+
+```

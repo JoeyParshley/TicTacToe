@@ -164,6 +164,10 @@ function GameController(
    */
   const getActivePlayer = () => activePlayer;
 
+  const setPlayerOneName = (playerName) => (players[0].name = playerName);
+
+  const setPlayerTwoName = (playerName) => (players[1].name = playerName);
+
   const getHasWinner = () => hasWinner;
 
   const getHasTie = () => hasTie;
@@ -519,6 +523,8 @@ function GameController(
     getHasTie,
     getHasWinner,
     getBoard: board.getBoard,
+    setPlayerOneName,
+    setPlayerTwoName,
   };
 }
 
@@ -554,7 +560,7 @@ function ScreenController() {
     if (hasWinner) {
       playerTurnH1.textContent = `${actvePlayer.name} is the Winner!!!`;
     } else if (hasTie) {
-      playerTurnH1.textContent = `Ther was a tie :/`;
+      playerTurnH1.textContent = `There was a tie :/`;
     } else {
       playerTurnH1.textContent = `${actvePlayer.name}'s turn . . . `;
     }
@@ -580,7 +586,21 @@ function ScreenController() {
     });
   };
 
+  const startButton = document.querySelector("#start");
   // event listeners
+  function clickHandlerStartButton(e) {
+    e.preventDefault();
+    // get the playerOne and playerTwo field values
+    const playerOneField = document.querySelector("#player-1");
+    const playerTwoField = document.querySelector("#player-2");
+
+    // set the name values of the users in the users object of the game instance.
+    game.setPlayerOneName(playerOneField.value);
+    game.setPlayerTwoName(playerTwoField.value);
+
+    updateScreen();
+  }
+
   function clickHandlerBoard(e) {
     const selectedRow = e.target.dataset.row;
     const selectedColumn = e.target.dataset.column;
@@ -591,6 +611,7 @@ function ScreenController() {
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
+  startButton.addEventListener("click", clickHandlerStartButton);
 
   // initial render
   updateScreen();
