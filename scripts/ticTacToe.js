@@ -600,9 +600,15 @@ function ScreenController() {
     const selectedColumn = e.target.dataset.column;
 
     if (!selectedRow || !selectedColumn) return;
-
-    game.playRound(selectedRow, selectedColumn);
-    updateScreen();
+    selectedCellValue = game
+      .getBoard()
+      [selectedRow][selectedColumn].getCellValue();
+    if (selectedCellValue === "-") {
+      game.playRound(selectedRow, selectedColumn);
+      updateScreen();
+    } else {
+      console.log("Please select another cell");
+    }
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
   startButton.addEventListener("click", clickHandlerStartButton);
