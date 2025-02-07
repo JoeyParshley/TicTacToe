@@ -173,12 +173,6 @@ function GameController(
   const getHasTie = () => hasTie;
 
   const playRound = (row, column) => {
-    if (row < 0 || row > 2 || column < 0 || column > 2) {
-      console.error(
-        "Row and column must be betwwen 0 and 2. Try again please."
-      );
-      return;
-    }
     // console current players choice
     // TODO: Create a toast for this or something like it
     console.log(
